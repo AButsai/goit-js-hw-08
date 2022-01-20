@@ -38,7 +38,7 @@
 // * 	чтобы время воспроизведения обновлялось в хранилище не чаще чем раз в секунду.
 
 import Player from '@vimeo/player';
-import throttle from 'lodash.throttle';
+import { throttle } from 'lodash';
 
 const iframe = document.querySelector('iframe');
 const player = new Player(iframe);
