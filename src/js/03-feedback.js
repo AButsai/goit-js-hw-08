@@ -33,29 +33,49 @@
 // * 5. Сделай так, чтобы хранилище обновлялось не чаще чем раз в 500 миллисекунд.
 // *    Для этого добавь в проект и используй библиотеку lodash.throttle.
 
+import { throttle } from 'lodash';
+
 const formFeedbackEl = document.querySelector('.feedback-form');
+const emailInputEl = document.querySelector('[name="email"]');
+const messageInputEl = document.querySelector('[name="message"]');
 
 const keyLocalStorage = 'feedback-form-state';
 
-// const feedback = {
-//   // constructor({ email, message }) {
-//   //   this.email = email;
-//   //   this.message = message;
-//   // }
-// };
+const dataInLocalStorage = JSON.parse(localStorage.getItem(keyLocalStorage));
 
-// formFeedbackEl.addEventListener('input', event => {
-//   const {
-//     elements: { email, message },
-//   } = event.currentTarget;
+if (dataInLocalStorage !== null) {
+  emailInputEl.value = dataInLocalStorage.email;
+  messageInputEl.value = dataInLocalStorage.message;
+}
 
-//   const userFeedback = {
-//     email: email.value,
-//     message: message.value,
-//   };
+const feedbackForm = {
+  email: 'email',
+  message: 'message',
 
-//   // userFeedback.email = email.value;
-//   // userFeedback.message = message.value;
-//   console.log('USER', userFeedback.email);
-//   console.log('USER', userFeedback.message);
-// });
+  getFeedbackForm() {
+    // console.log(`Email: ${this.email} \nMessage: ${this.message}`);
+    console.log(this);
+  },
+};
+
+formFeedbackEl.addEventListener(
+  'input',
+  throttle(() => {
+    entryLocalStorage();
+  }, 500),
+);
+
+function entryLocalStorage() {
+  feedbackForm.email = emailInputEl.value;
+  feedbackForm.message = messageInputEl.value;
+  localStorage.setItem(keyLocalStorage, JSON.stringify(feedbackForm));
+}
+
+formFeedbackEl.addEventListener('submit', e => {
+  e.preventDefault();
+
+  feedbackForm.getFeedbackForm();
+
+  formFeedbackEl.reset();
+  localStorage.clear();
+});
