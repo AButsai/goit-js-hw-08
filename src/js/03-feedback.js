@@ -53,8 +53,8 @@ const feedbackForm = {
   message: 'message',
 
   getFeedbackForm() {
-    // console.log(`Email: ${this.email} \nMessage: ${this.message}`);
-    console.log(this);
+    console.log(`Email: ${this.email} \nMessage: ${this.message}`);
+    // console.log(this);
   },
 };
 
