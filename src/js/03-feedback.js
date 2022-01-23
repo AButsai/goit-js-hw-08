@@ -1,3 +1,47 @@
+import throttle from 'lodash.throttle';
+
+const formFeedbackEl = document.querySelector('.feedback-form');
+const emailInputEl = document.querySelector('[name="email"]');
+const messageInputEl = document.querySelector('[name="message"]');
+
+const keyLocalStorage = 'feedback-form-state';
+
+const dataInLocalStorage = JSON.parse(localStorage.getItem(keyLocalStorage));
+
+if (dataInLocalStorage !== null) {
+  emailInputEl.value = dataInLocalStorage.email;
+  messageInputEl.value = dataInLocalStorage.message;
+}
+
+const feedbackFormObj = {
+  email: 'email',
+  message: 'message',
+};
+
+formFeedbackEl.addEventListener(
+  'input',
+  throttle(() => {
+    entryLocalStorage();
+  }, 500),
+);
+
+function entryLocalStorage() {
+  feedbackFormObj.email = emailInputEl.value;
+  feedbackFormObj.message = messageInputEl.value;
+  localStorage.setItem(keyLocalStorage, JSON.stringify(feedbackFormObj));
+}
+
+formFeedbackEl.addEventListener('submit', e => {
+  e.preventDefault();
+
+  if (emailInputEl.value !== '' && messageInputEl.value !== '') {
+    console.log(feedbackFormObj);
+
+    formFeedbackEl.reset();
+    localStorage.clear();
+  }
+});
+
 // ! Задание 3 - форма обратной связи
 // * В HTML есть разметка формы.Напиши скрипт который будет сохранять значения полей
 // * в локальное хранилище когда пользователь что - то печатает.
@@ -32,50 +76,3 @@
 
 // * 5. Сделай так, чтобы хранилище обновлялось не чаще чем раз в 500 миллисекунд.
 // *    Для этого добавь в проект и используй библиотеку lodash.throttle.
-
-import { throttle } from 'lodash';
-
-const formFeedbackEl = document.querySelector('.feedback-form');
-const emailInputEl = document.querySelector('[name="email"]');
-const messageInputEl = document.querySelector('[name="message"]');
-
-const keyLocalStorage = 'feedback-form-state';
-
-const dataInLocalStorage = JSON.parse(localStorage.getItem(keyLocalStorage));
-
-if (dataInLocalStorage !== null) {
-  emailInputEl.value = dataInLocalStorage.email;
-  messageInputEl.value = dataInLocalStorage.message;
-}
-
-const feedbackForm = {
-  email: 'email',
-  message: 'message',
-
-  getFeedbackForm() {
-    console.log(`Email: ${this.email} \nMessage: ${this.message}`);
-    // console.log(this);
-  },
-};
-
-formFeedbackEl.addEventListener(
-  'input',
-  throttle(() => {
-    entryLocalStorage();
-  }, 500),
-);
-
-function entryLocalStorage() {
-  feedbackForm.email = emailInputEl.value;
-  feedbackForm.message = messageInputEl.value;
-  localStorage.setItem(keyLocalStorage, JSON.stringify(feedbackForm));
-}
-
-formFeedbackEl.addEventListener('submit', e => {
-  e.preventDefault();
-
-  feedbackForm.getFeedbackForm();
-
-  formFeedbackEl.reset();
-  localStorage.clear();
-});

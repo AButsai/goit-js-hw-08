@@ -1,3 +1,29 @@
+import Player from '@vimeo/player';
+import { throttle } from 'lodash';
+
+const iframe = document.querySelector('iframe');
+const player = new Player(iframe);
+const videoplayerCurrentTime = 'videoplayer-current-time';
+const getTime = localStorage.getItem(videoplayerCurrentTime);
+
+if (getTime) {
+  player.setCurrentTime(Number(getTime));
+}
+
+player.on(
+  'timeupdate',
+  throttle(event => {
+    setLocalStoreg(event);
+  }, 250),
+);
+
+const setLocalStoreg = event => {
+  localStorage.setItem(videoplayerCurrentTime, event.seconds.toString());
+  if (event.seconds === event.duration) {
+    localStorage.clear();
+  }
+};
+
 // ! Задание 2 - видео плеер
 // * В HTML есть < iframe > с видео для Vimeo плеера.Напиши скрипт который будет сохранять текущее
 // * время воспроизведения видео в локальное хранилище и, при перезагрузке страницы,
@@ -36,27 +62,3 @@
 
 // * 7. Добавь в проект бибилотеку lodash.throttle https://www.npmjs.com/package/lodash.throttle и сделай так,
 // * 	чтобы время воспроизведения обновлялось в хранилище не чаще чем раз в секунду.
-
-import Player from '@vimeo/player';
-import { throttle } from 'lodash';
-
-const iframe = document.querySelector('iframe');
-const player = new Player(iframe);
-const videoplayerCurrentTime = 'videoplayer-current-time';
-const getTime = localStorage.getItem(videoplayerCurrentTime);
-
-player.setCurrentTime(Number(getTime));
-
-player.on(
-  'timeupdate',
-  throttle(event => {
-    setLocalStoreg(event);
-  }, 250),
-);
-
-const setLocalStoreg = event => {
-  localStorage.setItem(videoplayerCurrentTime, event.seconds.toString());
-  if (event.seconds === event.duration) {
-    localStorage.clear();
-  }
-};

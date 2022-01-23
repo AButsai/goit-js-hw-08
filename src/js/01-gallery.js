@@ -1,3 +1,33 @@
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
+import { galleryItems } from './gallery-items';
+
+const parentDivEl = document.querySelector('.gallery');
+
+const gallery = galleryItems
+  .map(({ preview, original, description }) => {
+    return `<a class="gallery__link" href="${original}">
+      <img
+      class="gallery__image"
+      src="${preview}"
+      alt="${description}"
+      />
+      </a>`;
+  })
+  .join('');
+
+parentDivEl.insertAdjacentHTML('beforeend', gallery);
+
+new SimpleLightbox('.gallery a', {
+  showCounter: false,
+  captions: true,
+  captionDelay: 250,
+  captionSelector: 'img',
+  captionType: 'attr',
+  captionsData: 'alt',
+  captionPosition: 'bottom',
+});
+
 // ! Задание 1 - библиотека SimpleLightbox
 // * Выполняй это задание в файлах 01 - gallery.html и 01 - gallery.js.
 // * Разбей его на несколько подзадач:
@@ -11,33 +41,3 @@
 
 // * Для того чтобы подключить CSS код библиотеки в проект, необходимо добавить еще один импорт,
 // * кроме того который описан в документации.
-
-import SimpleLightbox from 'simplelightbox';
-import 'simplelightbox/dist/simple-lightbox.min.css';
-import { galleryItems } from './gallery-items';
-
-const parentDivEl = document.querySelector('.gallery');
-
-const gallery = galleryItems.reduce((itemMarkup, { preview, original, description }) => {
-  return (
-    itemMarkup +
-    `<a class="gallery__link" href="${original}">
-      <img
-      class="gallery__image"
-      src="${preview}"
-      alt="${description}"
-      />
-      </a>`
-  );
-}, '');
-parentDivEl.insertAdjacentHTML('beforeend', gallery);
-
-new SimpleLightbox('.gallery a', {
-  showCounter: false,
-  captions: true,
-  captionDelay: 250,
-  captionSelector: 'img',
-  captionType: 'attr',
-  captionsData: 'alt',
-  captionPosition: 'bottom',
-});
