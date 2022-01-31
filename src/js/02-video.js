@@ -3,8 +3,8 @@ import throttle from 'lodash.throttle';
 
 const iframe = document.querySelector('iframe');
 const player = new Player(iframe);
-const videoplayerCurrentTime = 'videoplayer-current-time';
-const getTime = localStorage.getItem(videoplayerCurrentTime);
+const VIDEOPLAYER_CURRENT_TIME = 'videoplayer-current-time';
+const getTime = localStorage.getItem(VIDEOPLAYER_CURRENT_TIME);
 
 if (getTime) {
   player.setCurrentTime(Number(getTime));
@@ -18,9 +18,9 @@ player.on(
 );
 
 const setLocalStoreg = event => {
-  localStorage.setItem(videoplayerCurrentTime, event.seconds.toString());
+  localStorage.setItem(VIDEOPLAYER_CURRENT_TIME, event.seconds.toString());
   if (event.seconds === event.duration) {
-    localStorage.clear();
+    localStorage.removeItem(VIDEOPLAYER_CURRENT_TIME);
   }
 };
 
